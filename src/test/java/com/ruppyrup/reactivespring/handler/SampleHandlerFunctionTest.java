@@ -10,7 +10,8 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 
 @SpringBootTest
 @AutoConfigureWebTestClient
@@ -22,7 +23,7 @@ public class SampleHandlerFunctionTest {
     @Test
     public void fluxApproach1() {
         Flux<Integer> integerFlux = webTestClient.get().uri("/functional/flux")
-                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MediaType.APPLICATION_JSON)
                 .exchange()
                 .expectStatus().isOk()
                 .returnResult(Integer.class)
@@ -41,7 +42,7 @@ public class SampleHandlerFunctionTest {
         Integer expectedValue = new Integer(7);
 
         webTestClient.get().uri("/functional/mono")
-                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MediaType.APPLICATION_JSON)
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody(Integer.class)

@@ -1,10 +1,8 @@
 package com.ruppyrup.reactivespring.fluxandmonoplayground;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
-
-import java.time.Duration;
 
 public class FluxAndMonoErrorTest {
 
@@ -64,9 +62,9 @@ public class FluxAndMonoErrorTest {
         Flux<String> stringFlux = Flux.just("A", "B", "C")
                 .concatWith(Flux.error(new RuntimeException("Flux Error")))
                 .concatWith(Flux.just("D"))
-                .onErrorMap(e -> new CustomException(e))
-                //.retry(2); //retry twice
-        .retryBackoff(2, Duration.ofSeconds(5));
+                .onErrorMap(CustomException::new)
+                .retry(2); //retry twice
+//        .retryBackoff(2, Duration.ofSeconds(5));
 
         StepVerifier.create(stringFlux.log())
                 .expectSubscription()

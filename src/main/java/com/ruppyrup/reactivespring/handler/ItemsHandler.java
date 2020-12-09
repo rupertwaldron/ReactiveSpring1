@@ -5,12 +5,12 @@ import com.ruppyrup.reactivespring.repository.ItemReactiveRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.web.reactive.function.BodyInserters.fromObject;
 
 @Component
 public class ItemsHandler {
@@ -21,6 +21,7 @@ public class ItemsHandler {
     static Mono<ServerResponse> notFound = ServerResponse.notFound().build();
 
     public Mono<ServerResponse> getAllItems(ServerRequest serverRequest) {
+        System.out.println("In get all items");
         return ServerResponse
                 .ok()
                 .contentType(APPLICATION_JSON)
@@ -33,7 +34,7 @@ public class ItemsHandler {
         return itemMono
                 .flatMap(item -> ServerResponse.ok()
                         .contentType(APPLICATION_JSON)
-                        .body(fromObject(item)))
+                        .body(BodyInserters.fromValue(item)))
                 .switchIfEmpty(notFound);
     }
 
@@ -65,7 +66,7 @@ public class ItemsHandler {
                 );
         return updatedItem.flatMap(item -> ServerResponse.ok()
                 .contentType(APPLICATION_JSON)
-                .body(fromObject(item)))
+                .body(BodyInserters.fromValue(item)))
                 .switchIfEmpty(notFound);
     }
 }

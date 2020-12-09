@@ -29,6 +29,7 @@ public class ItemDataInitializer implements CommandLineRunner {
                 .thenMany(Flux.fromIterable(data()))
                 .flatMap(itemReactiveRepository::save)
                 .thenMany(itemReactiveRepository.findAll())
+                .log()
                 .subscribe(item -> System.out.println("Item inserted from Command Line Runner : " + item));
     }
 

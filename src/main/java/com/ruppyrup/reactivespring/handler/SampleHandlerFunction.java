@@ -8,6 +8,8 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.time.Duration;
+
 @Component
 public class SampleHandlerFunction {
 
@@ -16,7 +18,7 @@ public class SampleHandlerFunction {
         return ServerResponse
                 .ok()
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(Flux.just(1,2,3,4).log(), Integer.class);
+                .body(Flux.just(1,2,3,4).log(), Integer.class).delayElement(Duration.ofMillis(100));
     }
 
     public Mono<ServerResponse> mono(ServerRequest serverRequest) {

@@ -5,25 +5,33 @@ spring:
     active: dev
 ---
 spring:
-  profiles: dev
+  data.mongodb:
+    host: localhost
+    port: 27017
+    database: reactive-test
+  config:
+    activate:
+      on-profile: dev
+---
+spring:
   data.mongodb:
     host: localhost
     port: 27017
     database: local
+  config:
+    activate:
+      on-profile: nonprod
 ---
 spring:
-  profiles: nonprod
   data.mongodb:
     host: localhost
     port: 27017
     database: local
+  config:
+    activate:
+      on-profile: prod
 ---
 spring:
-  profiles: prod
-  data.mongodb:
-    host: localhost
-    port: 27017
-    database: local
----
-spring:
-  profiles: test
+  config:
+    activate:
+      on-profile: test
