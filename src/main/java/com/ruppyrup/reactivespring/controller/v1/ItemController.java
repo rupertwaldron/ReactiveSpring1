@@ -34,7 +34,7 @@ public class ItemController {
     }
 
     @GetMapping(ITEM_END_POINT_V1 + "/{id}")
-    public Mono<ResponseEntity<Item>> getOneItem(@PathVariable String id) {
+    public Mono<ResponseEntity<Item>> getOneItem(@PathVariable Integer id) {
         return itemReactiveRepository.findById(id)
                 .map(item -> new ResponseEntity<>(item, HttpStatus.OK))
                 .defaultIfEmpty(new ResponseEntity<>(HttpStatus.NOT_FOUND));
@@ -48,7 +48,7 @@ public class ItemController {
 
     @DeleteMapping(ITEM_END_POINT_V1 + "/{id}")
     public Mono<Void> deleteItem( // have to return something as non-blocking
-            @PathVariable String id
+            @PathVariable Integer id
     ) {
         return itemReactiveRepository.deleteById(id);
     }
@@ -61,7 +61,7 @@ public class ItemController {
 
     @PutMapping(ITEM_END_POINT_V1 + "/{id}")
     public Mono<ResponseEntity<Item>> updateItem(
-            @PathVariable String id,
+            @PathVariable Integer id,
             @RequestBody Item item
     ) {
         return itemReactiveRepository.findById(id)

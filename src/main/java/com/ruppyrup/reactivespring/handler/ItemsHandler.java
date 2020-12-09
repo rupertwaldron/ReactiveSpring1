@@ -29,7 +29,7 @@ public class ItemsHandler {
     }
 
     public Mono<ServerResponse> getItem(ServerRequest serverRequest) {
-        String id = serverRequest.pathVariable("id");
+        Integer id = Integer.valueOf(serverRequest.pathVariable("id"));
         Mono<Item> itemMono = itemReactiveRepository.findById(id);
         return itemMono
                 .flatMap(item -> ServerResponse.ok()
@@ -47,7 +47,7 @@ public class ItemsHandler {
     }
 
     public Mono<ServerResponse> deleteItem(ServerRequest serverRequest) {
-        String id = serverRequest.pathVariable("id");
+        Integer id = Integer.valueOf(serverRequest.pathVariable("id"));
         Mono<Void> deleteItem = itemReactiveRepository.deleteById(id);
         return ServerResponse.ok()
                 .contentType(APPLICATION_JSON)
@@ -55,7 +55,7 @@ public class ItemsHandler {
     }
 
     public Mono<ServerResponse> updateItem(ServerRequest serverRequest) {
-        String id = serverRequest.pathVariable("id");
+        Integer id = Integer.valueOf(serverRequest.pathVariable("id"));
         Mono<Item> updatedItem = serverRequest.bodyToMono(Item.class)
                 .flatMap(item -> itemReactiveRepository.findById(id)
                             .flatMap(currentItem -> {

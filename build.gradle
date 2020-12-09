@@ -20,10 +20,14 @@ repositories {
 
 test {
     exclude 'com/ruppyrup/reactivespring/fluxandmonoplayground/**'
+    useJUnitPlatform()
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb-reactive'
+//    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb-reactive'
+    implementation 'org.springframework.boot:spring-boot-starter-data-r2dbc'
+    implementation 'io.r2dbc:r2dbc-h2'
+    runtimeOnly 'com.h2database:h2'
     implementation 'com.google.code.gson:gson:2.8.5'
 //    implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.0'
     implementation 'org.springframework.boot:spring-boot-starter-webflux'

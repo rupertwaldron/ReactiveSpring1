@@ -1,8 +1,20 @@
 # start mongo with "brew services start mongodb"
 
+#spring:
+#  profiles:
+#    active: dev
+#---
 spring:
-  profiles:
-    active: dev
+  r2dbc:
+    url: r2dbc:h2:mem://testdb
+  config:
+    activate:
+      on-profile: sql
+  data:
+    r2dbc:
+      repositories:
+        enabled: true
+
 ---
 spring:
   data.mongodb:

@@ -35,10 +35,10 @@ public class ItemDataInitializer implements CommandLineRunner {
 
     private List<Item> data() {
         return Arrays.asList(
-                new Item(null, "Samsung TV", 399.99),
-                new Item(null, "LG TV", 420.00),
-                new Item(null, "Apple Watch", 299.99),
-                new Item(null, "BMW M3", 540000.00),
-                new Item("ABC", "Beats Headphones", 149.99));
+                new Item("Samsung TV", 399.99),
+                new Item("LG TV", 420.00),
+                new Item("Apple Watch", 299.99),
+                new Item("BMW M3", 540000.00),
+                new Item("Beats Headphones", 149.99));
     }
 }
