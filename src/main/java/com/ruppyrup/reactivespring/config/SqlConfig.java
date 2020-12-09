@@ -41,7 +41,7 @@ public class SqlConfig extends AbstractR2dbcConfiguration {
 
         CompositeDatabasePopulator populator = new CompositeDatabasePopulator();
         populator.addPopulators(new ResourceDatabasePopulator(new ClassPathResource("schema.sql")));
-//        populator.addPopulators(new ResourceDatabasePopulator(new ClassPathResource("data.sql")));
+        populator.addPopulators(new ResourceDatabasePopulator(new ClassPathResource("data.sql")));
         initializer.setDatabasePopulator(populator);
 
         return initializer;
