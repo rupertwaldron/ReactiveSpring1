@@ -39,7 +39,7 @@ public class SampleHandlerFunctionTest {
     @Test
     public void mono() {
 
-        Integer expectedValue = new Integer(7);
+        Integer expectedValue = 7;
 
         webTestClient.get().uri("/functional/mono")
                 .accept(MediaType.APPLICATION_JSON)

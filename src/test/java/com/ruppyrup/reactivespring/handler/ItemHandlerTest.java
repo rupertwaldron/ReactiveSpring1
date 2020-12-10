@@ -38,7 +38,7 @@ public class ItemHandlerTest {
             new Item(null, "LG TV", 420.0),
             new Item(null, "Apple Watch", 299.99),
             new Item(null, "BMW M3", 540000.00),
-            new Item("ABC", "Beats Headphones", 149.99));
+            new Item(1, "Beats Headphones", 149.99));
 
     @BeforeEach
     public void setUp() {
@@ -126,7 +126,7 @@ public class ItemHandlerTest {
         webTestClient
                 .delete()
                 .uri(ITEM_FUNCTIONAL_END_POINT_V1.concat("/{id}"), "ABC")
-                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MediaType.APPLICATION_JSON)
                 .exchange()
                 .expectStatus()
                 .isOk()
@@ -147,7 +147,7 @@ public class ItemHandlerTest {
         webTestClient
                 .put()
                 .uri(ITEM_FUNCTIONAL_END_POINT_V1.concat("/{id}"), "ABC")
-                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MediaType.APPLICATION_JSON)
                 .body(Mono.just(item), Item.class)
                 .exchange()
                 .expectStatus()

@@ -2,40 +2,41 @@ package com.ruppyrup.reactivespring.repository;
 
 
 import com.ruppyrup.reactivespring.document.Item;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
-import reactor.core.publisher.Flux;
+import org.springframework.boot.test.autoconfigure.data.r2dbc.DataR2dbcTest;
+import org.springframework.r2dbc.core.DatabaseClient;
+import org.springframework.test.context.jdbc.Sql;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
-import java.util.Arrays;
-import java.util.List;
-
-@DataMongoTest
+@DataR2dbcTest
+@Sql({"/test-schema.sql", "/test-data.sql"})
 public class ItemReactiveRepositorytest {
 
     @Autowired
     ItemReactiveRepository itemReactiveRepository;
 
-    List<Item> itemList = Arrays.asList(
-            new Item(null, "Samsung TV", 400.0),
-            new Item(null, "LG TV", 420.0),
-            new Item(null, "Apple Watch", 299.99),
-            new Item(null, "Beats Headphones", 149.99),
-            new Item("ABC", "Bose Headphones", 149.99));
+    @Autowired
+    DatabaseClient databaseClient;
 
-
-    @BeforeEach
-    public void setUp() {
-        itemReactiveRepository.deleteAll()
-                .thenMany(Flux.fromIterable(itemList))
-                .flatMap(itemReactiveRepository::save)
-                .doOnNext(item -> System.out.println("Instered item is : " + item))
-                .blockLast(); // wait until all data is loaded before tests
-    }
+//    List<Item> itemList = Arrays.asList(
+//            new Item(null, "Samsung TV", 400.0),
+//            new Item(null, "LG TV", 420.0),
+//            new Item(null, "Apple Watch", 299.99),
+//            new Item(null, "Beats Headphones", 149.99),
+//            new Item(1, "Bose Headphones", 149.99));
+//
+//
+//    @BeforeEach
+//    public void setUp() {
+//        itemReactiveRepository.deleteAll()
+//                .thenMany(Flux.fromIterable(itemList))
+//                .flatMap(itemReactiveRepository::save)
+//                .doOnNext(item -> System.out.println("Instered item is : " + item))
+//                .blockLast(); // wait until all data is loaded before tests
+//    }
 
     @Test
     public void getAllItems() {
@@ -48,7 +49,7 @@ public class ItemReactiveRepositorytest {
 
     @Test
     public void getItemByID() {
-        StepVerifier.create(itemReactiveRepository.findById("ABC"))
+        StepVerifier.create(itemReactiveRepository.findById(2))
                 .expectSubscription()
                 .expectNextMatches(item -> item.getDescription().equals("Bose Headphones"))
                 .verifyComplete();
@@ -65,12 +66,12 @@ public class ItemReactiveRepositorytest {
     @Test
     public void saveItem() {
 
-        Item item = new Item("DEF", "Google Home Mini", 30.00);
+        Item item = new Item("Google Home Mini", 30.00);
         Mono<Item> savedItem = itemReactiveRepository.save(item);
 
         StepVerifier.create(savedItem.log("saved item: "))
                 .expectSubscription()
-                .expectNextMatches(item1 -> item1.getId().equals("DEF") && item1.getDescription().equals("Google Home Mini"))
+                .expectNextMatches(item1 -> item1.getId().equals(1) && item1.getDescription().equals("Google Home Mini"))
                 .verifyComplete();
     }
 
@@ -97,7 +98,7 @@ public class ItemReactiveRepositorytest {
 
     @Test
     public void deleteItemById() {
-        Mono<Void> deletedItem = itemReactiveRepository.findById("ABC") //Mono<Item>
+        Mono<Void> deletedItem = itemReactiveRepository.findById(1) //Mono<Item>
                 .map(Item::getId)
                 .flatMap(id -> itemReactiveRepository.deleteById(id));
 

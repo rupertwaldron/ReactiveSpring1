@@ -26,7 +26,7 @@ public class FluxAndMonoControllerTest {
     @Test
     public void fluxApproach1() {
         Flux<Integer> integerFlux = webTestClient.get().uri("/flux")
-                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MediaType.APPLICATION_JSON)
                 .exchange()
                 .expectStatus().isOk()
                 .returnResult(Integer.class)
@@ -41,11 +41,11 @@ public class FluxAndMonoControllerTest {
     @Test
     public void fluxApproach2() {
         webTestClient.get().uri("/flux")
-                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MediaType.APPLICATION_JSON)
                 .exchange()
                 .expectStatus().isOk()
                 .expectHeader()
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .contentType(MediaType.APPLICATION_JSON)
                 .expectBodyList(Integer.class)
                 .hasSize(4);
     }
@@ -56,7 +56,7 @@ public class FluxAndMonoControllerTest {
         List<Integer> expectedIntegerList = Arrays.asList(1,2,3,4);
 
         EntityExchangeResult<List<Integer>> entityExchangeResult = webTestClient.get().uri("/flux")
-                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MediaType.APPLICATION_JSON)
                 .exchange()
                 .expectStatus().isOk()
                 .expectBodyList(Integer.class)
@@ -71,7 +71,7 @@ public class FluxAndMonoControllerTest {
         List<Integer> expectedIntegerList = Arrays.asList(1,2,3,4);
 
         webTestClient.get().uri("/flux")
-                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MediaType.APPLICATION_JSON)
                 .exchange()
                 .expectStatus().isOk()
                 .expectBodyList(Integer.class)
@@ -100,10 +100,10 @@ public class FluxAndMonoControllerTest {
     @Test
     public void mono() {
 
-        Integer expectedValue = new Integer(1);
+        Integer expectedValue = 1;
 
         webTestClient.get().uri("/mono")
-                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MediaType.APPLICATION_JSON)
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody(Integer.class)

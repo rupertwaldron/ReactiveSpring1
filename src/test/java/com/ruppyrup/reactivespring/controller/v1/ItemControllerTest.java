@@ -37,7 +37,7 @@ public class ItemControllerTest {
             new Item(null, "LG TV", 420.0),
             new Item(null, "Apple Watch", 299.99),
             new Item(null, "BMW M3", 540000.00),
-            new Item("ABC", "Beats Headphones", 149.99));
+            new Item(1, "Beats Headphones", 149.99));
 
     @BeforeEach
     public void setUp() {
@@ -55,7 +55,7 @@ public class ItemControllerTest {
                 .expectStatus()
                 .isOk()
                 .expectHeader()
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .contentType(MediaType.APPLICATION_JSON)
                 .expectBodyList(Item.class)
                 .hasSize(5)
                 .consumeWith(response -> {
@@ -71,7 +71,7 @@ public class ItemControllerTest {
                 .expectStatus()
                 .isOk()
                 .expectHeader()
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .contentType(MediaType.APPLICATION_JSON)
                 .returnResult(Item.class)
                 .getResponseBody();
 
@@ -109,7 +109,7 @@ public class ItemControllerTest {
         webTestClient
                 .post()
                 .uri(ITEM_END_POINT_V1.concat("/{id}"), "ABC")
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .contentType(MediaType.APPLICATION_JSON)
                 .body(Mono.just(item), Item.class)
                 .exchange() // body posted
                 .expectStatus()
@@ -125,7 +125,7 @@ public class ItemControllerTest {
         webTestClient
                 .delete()
                 .uri(ITEM_END_POINT_V1.concat("/{id}"), "ABC")
-                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MediaType.APPLICATION_JSON)
                 .exchange()
                 .expectStatus()
                 .isOk()
@@ -141,7 +141,7 @@ public class ItemControllerTest {
     @Test
     public void updateOneItem() {
 
-        Item item = new Item("ABC", "Samsund TV 5K", 1495.99);
+        Item item = new Item(1, "Samsund TV 5K", 1495.99);
 
         webTestClient
                 .put()
@@ -161,7 +161,7 @@ public class ItemControllerTest {
     @Test
     public void updateOneItem_notFound() {
 
-        Item item = new Item("DEF", "Samsund TV 5K", 1495.99);
+        Item item = new Item(1, "Samsund TV 5K", 1495.99);
 
         webTestClient
                 .put()
