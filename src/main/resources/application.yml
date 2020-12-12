@@ -6,10 +6,17 @@
 #---
 spring:
   r2dbc:
-    url: r2dbc:mysql://localhost/testdb
+    url: r2dbc:mysql://localhost/reactive_items_db
     username: devuser
     password: devuser
-
+  config:
+        activate:
+          on-profile: sql
+  datasource:
+    data: data.sql
+    schema: schema.sql
+mydb:
+  name: reactive_items_db
 ---
 spring:
   data.mongodb:
@@ -39,6 +46,15 @@ spring:
       on-profile: prod
 ---
 spring:
+  r2dbc:
+    url: r2dbc:mysql://localhost/testdb
+    username: devuser
+    password: devuser
   config:
-    activate:
-      on-profile: test
+        activate:
+          on-profile: test
+  datasource:
+    data: test-data.sql
+    schema: test-schema.sql
+mydb:
+  name: testdb

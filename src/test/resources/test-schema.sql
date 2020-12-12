@@ -1,1 +1,5 @@
-CREATE TABLE item (id SERIAL PRIMARY KEY, description VARCHAR(255), price DECIMAL(10,2));
+CREATE TABLE IF NOT EXISTS items (
+    id          INT AUTO_INCREMENT PRIMARY KEY,
+    description VARCHAR(255),
+    price       DECIMAL(10, 2)
+);

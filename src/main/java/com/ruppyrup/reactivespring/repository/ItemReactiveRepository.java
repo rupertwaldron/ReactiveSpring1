@@ -8,7 +8,7 @@ import reactor.core.publisher.Mono;
 public interface ItemReactiveRepository extends ReactiveCrudRepository<Item, Integer> {
 
     // Use $ brew services restart mongodb
-    @Query("SELECT TOP 1 * FROM items WHERE description like :description")
+    @Query("SELECT * FROM items WHERE description =:description LIMIT 1")
     Mono<Item> findByDescription(String description);
 
 }
