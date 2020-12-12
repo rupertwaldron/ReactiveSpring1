@@ -33,7 +33,13 @@ public class TestSetup {
         itemReactiveRepository.deleteAll()
                 .thenMany(Flux.fromIterable(itemList))
                 .flatMap(itemReactiveRepository::save)
-                .doOnNext(item -> System.out.println("Instered item is : " + item))
+                .doOnNext(item -> System.out.println("Saved item is : " + item))
                 .blockLast(); // wait until all data is loaded before tests
+    }
+
+    @AfterEach
+    public void cleanUp() {
+        itemReactiveRepository.deleteAll()
+                .subscribe(value -> System.out.println("Deleted: " + value));
     }
 }

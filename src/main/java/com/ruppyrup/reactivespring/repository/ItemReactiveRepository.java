@@ -11,4 +11,7 @@ public interface ItemReactiveRepository extends ReactiveCrudRepository<Item, Int
     @Query("SELECT * FROM items WHERE description =:description LIMIT 1")
     Mono<Item> findByDescription(String description);
 
+    @Query("DELETE from items")
+    Mono<Void> deleteAll();
+
 }
