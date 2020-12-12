@@ -6,14 +6,9 @@
 #---
 spring:
   r2dbc:
-    url: r2dbc:h2:mem://testdb
-  config:
-    activate:
-      on-profile: sql
-  data:
-    r2dbc:
-      repositories:
-        enabled: true
+    url: r2dbc:mysql://localhost/testdb
+    username: devuser
+    password: devuser
 
 ---
 spring:

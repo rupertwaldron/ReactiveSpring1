@@ -26,8 +26,9 @@ test {
 dependencies {
 //    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb-reactive'
     implementation 'org.springframework.boot:spring-boot-starter-data-r2dbc'
-    implementation 'io.r2dbc:r2dbc-h2'
-    runtimeOnly 'com.h2database:h2'
+    runtimeOnly 'dev.miku:r2dbc-mysql'
+    runtimeOnly 'mysql:mysql-connector-java'
+//    runtimeOnly 'com.h2database:h2'
     implementation 'com.google.code.gson:gson:2.8.5'
 //    implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.0'
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
@@ -35,9 +36,9 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'io.projectreactor.tools:blockhound:1.0.4.RELEASE'
-    testRuntime 'org.junit.platform:junit-platform-launcher'
+//    testRuntime 'org.junit.platform:junit-platform-launcher'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'de.flapdoodle.embed:de.flapdoodle.embed.mongo'
+//    testImplementation 'de.flapdoodle.embed:de.flapdoodle.embed.mongo'
     testImplementation 'io.projectreactor:reactor-test'
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
