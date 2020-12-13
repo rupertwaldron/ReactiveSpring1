@@ -4,7 +4,6 @@ package com.ruppyrup.reactivespring.controller.v1;
 import com.ruppyrup.reactivespring.document.Item;
 import com.ruppyrup.reactivespring.repository.ItemReactiveRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,14 +16,17 @@ import static com.ruppyrup.reactivespring.constants.ItemConstants.ITEM_END_POINT
 @RestController
 public class ItemController {
 
+    private final ItemReactiveRepository itemReactiveRepository;
+
+    public ItemController(ItemReactiveRepository itemReactiveRepository) {
+        this.itemReactiveRepository = itemReactiveRepository;
+    }
+
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<String> handleRuntimeException(RuntimeException ex) {
         log.error("Exception caught: " + ex);
         return ResponseEntity.status(HttpStatus.I_AM_A_TEAPOT).body(ex.getMessage());
     }
-
-    @Autowired
-    ItemReactiveRepository itemReactiveRepository;
 
     @GetMapping(ITEM_END_POINT_V1)
     public Flux<Item> getAllItems() {
@@ -48,7 +50,7 @@ public class ItemController {
 
     @DeleteMapping(ITEM_END_POINT_V1 + "/{id}")
     public Mono<Void> deleteItem( // have to return something as non-blocking
-            @PathVariable Integer id
+                                  @PathVariable Integer id
     ) {
         return itemReactiveRepository.deleteById(id);
     }

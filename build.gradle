@@ -19,7 +19,7 @@ repositories {
 }
 
 test {
-    exclude 'com/ruppyrup/reactivespring/fluxandmonoplayground/**'
+//    exclude 'com/ruppyrup/reactivespring/fluxandmonoplayground/**'
     useJUnitPlatform()
 }
 

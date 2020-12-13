@@ -26,7 +26,6 @@ import static com.ruppyrup.reactivespring.constants.ItemConstants.ITEM_FUNCTIONA
 @ActiveProfiles("test")
 public class ItemHandlerTest {
 
-
     @Autowired
     WebTestClient webTestClient;
 
@@ -34,11 +33,11 @@ public class ItemHandlerTest {
     ItemReactiveRepository itemReactiveRepository;
 
     public static List<Item> items = Arrays.asList(
-            new Item(null, "Samsung TV", 399.99),
-            new Item(null, "LG TV", 420.0),
-            new Item(null, "Apple Watch", 299.99),
-            new Item(null, "BMW M3", 540000.00),
-            new Item(1, "Beats Headphones", 149.99));
+            new Item("Samsung TV", 399.99),
+            new Item("LG TV", 420.0),
+            new Item("Apple Watch", 299.99),
+            new Item("BMW M3", 540000.00),
+            new Item("Beats Headphones", 149.99));
 
     @BeforeEach
     public void setUp() {

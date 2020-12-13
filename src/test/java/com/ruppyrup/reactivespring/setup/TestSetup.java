@@ -1,10 +1,9 @@
-package com.ruppyrup.reactivespring.repository;
+package com.ruppyrup.reactivespring.setup;
 
 import com.ruppyrup.reactivespring.document.Item;
-import org.junit.jupiter.api.AfterAll;
+import com.ruppyrup.reactivespring.repository.ItemReactiveRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
@@ -19,6 +18,7 @@ public class TestSetup {
 
     @Autowired
     ItemReactiveRepository itemReactiveRepository;
+
 
     List<Item> itemList = Arrays.asList(
             new Item("Samsung TV", 400.0),

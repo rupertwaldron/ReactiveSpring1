@@ -2,26 +2,20 @@ package com.ruppyrup.reactivespring.repository;
 
 
 import com.ruppyrup.reactivespring.document.Item;
-import org.junit.jupiter.api.BeforeEach;
+import com.ruppyrup.reactivespring.setup.TestSetup;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.data.r2dbc.DataR2dbcTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.r2dbc.core.DatabaseClient;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.transaction.annotation.Transactional;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
-
-import java.util.Arrays;
-import java.util.List;
 
 
 public class ItemReactiveRepositorytest extends TestSetup {
 
+    @Autowired
+    ItemReactiveRepository itemReactiveRepository;
 
     @Autowired
     DatabaseClient databaseClient;

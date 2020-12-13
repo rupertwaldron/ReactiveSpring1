@@ -71,7 +71,7 @@ public class FluxAndMonoErrorTest {
                 .expectNext("A", "B", "C")
                 .expectNext("A", "B", "C")
                 .expectNext("A", "B", "C")
-                .expectError(IllegalStateException.class)
+                .expectError(CustomException.class)
                 .verify();
     }
 

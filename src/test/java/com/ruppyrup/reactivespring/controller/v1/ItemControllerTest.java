@@ -3,50 +3,29 @@ package com.ruppyrup.reactivespring.controller.v1;
 
 import com.ruppyrup.reactivespring.document.Item;
 import com.ruppyrup.reactivespring.repository.ItemReactiveRepository;
+import com.ruppyrup.reactivespring.setup.TestSetup;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static com.ruppyrup.reactivespring.constants.ItemConstants.ITEM_END_POINT_V1;
 
-@SpringBootTest
 @AutoConfigureWebTestClient
-@ActiveProfiles("test")
-public class ItemControllerTest {
+public class ItemControllerTest extends TestSetup {
 
     @Autowired
     WebTestClient webTestClient;
 
     @Autowired
     ItemReactiveRepository itemReactiveRepository;
-
-    public static List<Item> items = Arrays.asList(
-            new Item(null, "Samsung TV", 399.99),
-            new Item(null, "LG TV", 420.0),
-            new Item(null, "Apple Watch", 299.99),
-            new Item(null, "BMW M3", 540000.00),
-            new Item(1, "Beats Headphones", 149.99));
-
-    @BeforeEach
-    public void setUp() {
-        itemReactiveRepository.deleteAll()
-                .thenMany(Flux.fromIterable(items))
-                .flatMap(itemReactiveRepository::save)
-                .doOnNext(System.out::println)
-                .blockLast();
-    }
 
     @Test
     public void getAllItems() {
@@ -84,19 +63,19 @@ public class ItemControllerTest {
     public void getOneItem() {
     webTestClient
             .get()
-            .uri(ITEM_END_POINT_V1.concat("/{id}"), "ABC")
+            .uri(ITEM_END_POINT_V1.concat("/{id}"), 1)
             .exchange()
             .expectStatus()
             .isOk()
             .expectBody()
-            .jsonPath("$.price", 149.99);
+            .jsonPath("$.price", 400.00);
     }
 
     @Test
     public void getOneItem_notFound() {
         webTestClient
                 .get()
-                .uri(ITEM_END_POINT_V1.concat("/{id}"), "DEF")
+                .uri(ITEM_END_POINT_V1.concat("/{id}"), "1000000")
                 .exchange()
                 .expectStatus().isNotFound();
     }
@@ -104,7 +83,7 @@ public class ItemControllerTest {
     @Test
     public void createOneItem() {
 
-        Item item = new Item(null, "iPhone XS", 1199.99);
+        Item item = new Item("iPhone XS", 1199.99);
 
         webTestClient
                 .post()
@@ -124,7 +103,7 @@ public class ItemControllerTest {
     public void deleteOneItem() {
         webTestClient
                 .delete()
-                .uri(ITEM_END_POINT_V1.concat("/{id}"), "ABC")
+                .uri(ITEM_END_POINT_V1.concat("/{id}"), 3)
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()
                 .expectStatus()
@@ -133,7 +112,7 @@ public class ItemControllerTest {
 
         webTestClient
                 .get()
-                .uri(ITEM_END_POINT_V1.concat("/{id}"), "ABC")
+                .uri(ITEM_END_POINT_V1.concat("/{id}"), 3)
                 .exchange()
                 .expectStatus().isNotFound();
     }
@@ -145,9 +124,9 @@ public class ItemControllerTest {
 
         webTestClient
                 .put()
-                .uri(ITEM_END_POINT_V1.concat("/{id}"), "ABC")
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .uri(ITEM_END_POINT_V1.concat("/{id}"), 1)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
                 .body(Mono.just(item), Item.class)
                 .exchange() // body posted
                 .expectStatus()
@@ -165,9 +144,9 @@ public class ItemControllerTest {
 
         webTestClient
                 .put()
-                .uri(ITEM_END_POINT_V1.concat("/{id}"), "DEF")
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .uri(ITEM_END_POINT_V1.concat("/{id}"), 6)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
                 .body(Mono.just(item), Item.class)
                 .exchange() // body posted
                 .expectStatus()
