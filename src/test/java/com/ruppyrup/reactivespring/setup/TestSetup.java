@@ -2,8 +2,7 @@ package com.ruppyrup.reactivespring.setup;
 
 import com.ruppyrup.reactivespring.document.Item;
 import com.ruppyrup.reactivespring.repository.ItemReactiveRepository;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
@@ -14,6 +13,7 @@ import java.util.List;
 
 @SpringBootTest
 @ActiveProfiles("test")
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class TestSetup {
 
     @Autowired
@@ -28,7 +28,7 @@ public class TestSetup {
             new Item("Bose Headphones", 149.99));
 
 
-    @BeforeEach
+    @BeforeAll
     public void setUp() {
         itemReactiveRepository.deleteAll()
                 .thenMany(Flux.fromIterable(itemList))
@@ -37,7 +37,7 @@ public class TestSetup {
                 .blockLast(); // wait until all data is loaded before tests
     }
 
-    @AfterEach
+    @AfterAll
     public void cleanUp() {
         itemReactiveRepository.deleteAll()
                 .subscribe(value -> System.out.println("Deleted: " + value));

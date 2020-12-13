@@ -21,11 +21,10 @@ public class ItemReactiveRepositorytest extends TestSetup {
     DatabaseClient databaseClient;
 
     @Test
-    @Order(1)
     public void getAllItems() {
         StepVerifier.create(itemReactiveRepository.findAll())
         .expectSubscription()
-        .expectNextCount(5)
+        .expectNextCount(6)
         .verifyComplete();
     }
 
@@ -83,7 +82,7 @@ public class ItemReactiveRepositorytest extends TestSetup {
 
         StepVerifier.create(itemReactiveRepository.findAll().log("The new item list: "))
                 .expectSubscription()
-                .expectNextCount(4)
+                .expectNextCount(5)
                 .verifyComplete();
     }
 

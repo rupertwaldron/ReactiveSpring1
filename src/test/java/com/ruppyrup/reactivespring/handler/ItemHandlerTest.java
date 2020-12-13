@@ -2,6 +2,7 @@ package com.ruppyrup.reactivespring.handler;
 
 import com.ruppyrup.reactivespring.document.Item;
 import com.ruppyrup.reactivespring.repository.ItemReactiveRepository;
+import com.ruppyrup.reactivespring.setup.TestSetup;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,32 +22,14 @@ import java.util.List;
 import static com.ruppyrup.reactivespring.constants.ItemConstants.ITEM_FUNCTIONAL_END_POINT_V1;
 
 
-@SpringBootTest
 @AutoConfigureWebTestClient
-@ActiveProfiles("test")
-public class ItemHandlerTest {
+public class ItemHandlerTest extends TestSetup {
 
     @Autowired
     WebTestClient webTestClient;
 
     @Autowired
     ItemReactiveRepository itemReactiveRepository;
-
-    public static List<Item> items = Arrays.asList(
-            new Item("Samsung TV", 399.99),
-            new Item("LG TV", 420.0),
-            new Item("Apple Watch", 299.99),
-            new Item("BMW M3", 540000.00),
-            new Item("Beats Headphones", 149.99));
-
-    @BeforeEach
-    public void setUp() {
-        itemReactiveRepository.deleteAll()
-                .thenMany(Flux.fromIterable(items))
-                .flatMap(itemReactiveRepository::save)
-                .doOnNext(System.out::println)
-                .blockLast();
-    }
 
     @Test
     public void getAllItems() {
@@ -57,10 +40,10 @@ public class ItemHandlerTest {
                 .expectHeader()
                 .contentType(MediaType.APPLICATION_JSON)
                 .expectBodyList(Item.class)
-                .hasSize(5)
+                .hasSize(4)
                 .consumeWith(response -> {
                     List<Item> items1 = response.getResponseBody();
-                    items1.forEach(item -> Assertions.assertTrue(item.getId() != null));
+                    items1.forEach(item -> Assertions.assertNotNull(item.getId()));
                 });
     }
 
@@ -76,7 +59,7 @@ public class ItemHandlerTest {
                 .getResponseBody();
 
         StepVerifier.create(itemsFlux.log("value from network: "))
-                .expectNextCount(5)
+                .expectNextCount(4)
                 .verifyComplete();
     }
 
@@ -84,19 +67,19 @@ public class ItemHandlerTest {
     public void getOneItem() {
         webTestClient
                 .get()
-                .uri(ITEM_FUNCTIONAL_END_POINT_V1.concat("/{id}"), "ABC")
+                .uri(ITEM_FUNCTIONAL_END_POINT_V1.concat("/{id}"), 1)
                 .exchange()
                 .expectStatus()
                 .isOk()
                 .expectBody()
-                .jsonPath("$.price", 149.99);
+                .jsonPath("$.price", 400.00);
     }
 
     @Test
     public void getOneItem_notFound() {
         webTestClient
                 .get()
-                .uri(ITEM_FUNCTIONAL_END_POINT_V1.concat("/{id}"), "DEF")
+                .uri(ITEM_FUNCTIONAL_END_POINT_V1.concat("/{id}"), 8)
                 .exchange()
                 .expectStatus().isNotFound();
     }
@@ -104,7 +87,7 @@ public class ItemHandlerTest {
     @Test
     public void createItem() {
 
-        Item item = new Item(null, "Monkey", 27.50);
+        Item item = new Item("Monkey", 27.50);
 
         webTestClient
                 .post()
@@ -124,7 +107,7 @@ public class ItemHandlerTest {
     public void deleteOneItem() {
         webTestClient
                 .delete()
-                .uri(ITEM_FUNCTIONAL_END_POINT_V1.concat("/{id}"), "ABC")
+                .uri(ITEM_FUNCTIONAL_END_POINT_V1.concat("/{id}"), 5)
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()
                 .expectStatus()
@@ -133,7 +116,7 @@ public class ItemHandlerTest {
 
         webTestClient
                 .get()
-                .uri(ITEM_FUNCTIONAL_END_POINT_V1.concat("/{id}"), "ABC")
+                .uri(ITEM_FUNCTIONAL_END_POINT_V1.concat("/{id}"), 5)
                 .exchange()
                 .expectStatus().isNotFound();
     }
@@ -141,25 +124,25 @@ public class ItemHandlerTest {
     @Test
     public void updateItem() {
 
-        Item item = new Item(null, "Monkey", 27.50);
+        Item item = new Item("Monkey", 27.50);
 
         webTestClient
                 .put()
-                .uri(ITEM_FUNCTIONAL_END_POINT_V1.concat("/{id}"), "ABC")
+                .uri(ITEM_FUNCTIONAL_END_POINT_V1.concat("/{id}"), 1)
                 .accept(MediaType.APPLICATION_JSON)
                 .body(Mono.just(item), Item.class)
                 .exchange()
                 .expectStatus()
                 .isOk()
                 .expectBody()
-                .jsonPath("$.id").isEqualTo("ABC")
+                .jsonPath("$.id").isEqualTo(1)
                 .jsonPath("$.description").isEqualTo("Monkey")
                 .jsonPath("$.price").isEqualTo(27.50)
                 .consumeWith(System.out::println);
 
         webTestClient
                 .get()
-                .uri(ITEM_FUNCTIONAL_END_POINT_V1.concat("/{id}"), "ABC")
+                .uri(ITEM_FUNCTIONAL_END_POINT_V1.concat("/{id}"), 1)
                 .exchange()
                 .expectStatus().isOk();
     }

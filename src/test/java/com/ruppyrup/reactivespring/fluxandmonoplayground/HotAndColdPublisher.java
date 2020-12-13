@@ -16,16 +16,16 @@ public class HotAndColdPublisher {
 
         flux.subscribe(s -> System.out.println("Subscriber 1 : " + s));
 
-        Thread.sleep(2000);
+        Thread.sleep(3000);
 
         flux.subscribe(s -> System.out.println("Subscriber 2 : " + s));
 
-        Thread.sleep(4000);
+        Thread.sleep(5000);
     }
 
     @Test
     public void hotPublisherTest() throws InterruptedException {
-        // COLD: both subscribers receive all the elements
+        // HOT: last subscriber only gets elements from the point after taken from the 1st subscriber
         Flux<String> flux = Flux.just("A", "B", "C", "D", "E")
                 .delayElements(Duration.ofSeconds(1));
 
@@ -37,6 +37,6 @@ public class HotAndColdPublisher {
 
         connectableFlux.subscribe(s -> System.out.println("Subscriber 2 : " + s));
         // does not get A and B only after has started receives all the elements
-        Thread.sleep(4000);
+        Thread.sleep(5000);
     }
 }

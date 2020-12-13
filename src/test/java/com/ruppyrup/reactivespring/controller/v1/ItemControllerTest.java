@@ -5,6 +5,7 @@ import com.ruppyrup.reactivespring.document.Item;
 import com.ruppyrup.reactivespring.repository.ItemReactiveRepository;
 import com.ruppyrup.reactivespring.setup.TestSetup;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
@@ -19,7 +20,7 @@ import java.util.List;
 import static com.ruppyrup.reactivespring.constants.ItemConstants.ITEM_END_POINT_V1;
 
 @AutoConfigureWebTestClient
-public class ItemControllerTest extends TestSetup {
+class ItemControllerTest extends TestSetup {
 
     @Autowired
     WebTestClient webTestClient;
@@ -28,7 +29,7 @@ public class ItemControllerTest extends TestSetup {
     ItemReactiveRepository itemReactiveRepository;
 
     @Test
-    public void getAllItems() {
+    void getAllItems() {
         webTestClient.get().uri(ITEM_END_POINT_V1)
                 .exchange()
                 .expectStatus()
@@ -36,7 +37,7 @@ public class ItemControllerTest extends TestSetup {
                 .expectHeader()
                 .contentType(MediaType.APPLICATION_JSON)
                 .expectBodyList(Item.class)
-                .hasSize(5)
+                .hasSize(4)
                 .consumeWith(response -> {
                     List<Item> items1 = response.getResponseBody();
                     items1.forEach(item -> Assertions.assertTrue(item.getId() != null));
@@ -44,7 +45,7 @@ public class ItemControllerTest extends TestSetup {
     }
 
     @Test
-    public void getAllItems2() {
+    void getAllItems2() {
         Flux<Item> itemsFlux = webTestClient.get().uri(ITEM_END_POINT_V1)
                 .exchange()
                 .expectStatus()
@@ -55,12 +56,12 @@ public class ItemControllerTest extends TestSetup {
                 .getResponseBody();
 
         StepVerifier.create(itemsFlux.log("value from network: "))
-                .expectNextCount(5)
+                .expectNextCount(4)
                 .verifyComplete();
     }
 
     @Test
-    public void getOneItem() {
+    void getOneItem() {
     webTestClient
             .get()
             .uri(ITEM_END_POINT_V1.concat("/{id}"), 1)
@@ -72,7 +73,7 @@ public class ItemControllerTest extends TestSetup {
     }
 
     @Test
-    public void getOneItem_notFound() {
+    void getOneItem_notFound() {
         webTestClient
                 .get()
                 .uri(ITEM_END_POINT_V1.concat("/{id}"), "1000000")
@@ -81,13 +82,13 @@ public class ItemControllerTest extends TestSetup {
     }
 
     @Test
-    public void createOneItem() {
+    void createOneItem() {
 
         Item item = new Item("iPhone XS", 1199.99);
 
         webTestClient
                 .post()
-                .uri(ITEM_END_POINT_V1.concat("/{id}"), "ABC")
+                .uri(ITEM_END_POINT_V1)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(Mono.just(item), Item.class)
                 .exchange() // body posted
@@ -100,7 +101,7 @@ public class ItemControllerTest extends TestSetup {
     }
 
     @Test
-    public void deleteOneItem() {
+    void deleteOneItem() {
         webTestClient
                 .delete()
                 .uri(ITEM_END_POINT_V1.concat("/{id}"), 3)
@@ -118,13 +119,13 @@ public class ItemControllerTest extends TestSetup {
     }
 
     @Test
-    public void updateOneItem() {
+    void updateOneItem() {
 
-        Item item = new Item(1, "Samsund TV 5K", 1495.99);
+        Item item = new Item("Samsund TV 5K", 1495.99);
 
         webTestClient
                 .put()
-                .uri(ITEM_END_POINT_V1.concat("/{id}"), 1)
+                .uri(ITEM_END_POINT_V1.concat("/{id}"), 4)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .body(Mono.just(item), Item.class)
@@ -138,13 +139,14 @@ public class ItemControllerTest extends TestSetup {
     }
 
     @Test
-    public void updateOneItem_notFound() {
+    @Order(8)
+    void updateOneItem_notFound() {
 
-        Item item = new Item(1, "Samsund TV 5K", 1495.99);
+        Item item = new Item("Samsund TV 5K", 1495.99);
 
         webTestClient
                 .put()
-                .uri(ITEM_END_POINT_V1.concat("/{id}"), 6)
+                .uri(ITEM_END_POINT_V1.concat("/{id}"), 10)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .body(Mono.just(item), Item.class)

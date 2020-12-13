@@ -1,6 +1,7 @@
 package com.ruppyrup.reactivespring.handler;
 
 
+import com.ruppyrup.reactivespring.setup.TestSetup;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
@@ -13,9 +14,9 @@ import reactor.test.StepVerifier;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
-@SpringBootTest
+
 @AutoConfigureWebTestClient
-public class SampleHandlerFunctionTest {
+public class SampleHandlerFunctionTest extends TestSetup {
 
     @Autowired
     WebTestClient webTestClient;
